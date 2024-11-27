@@ -1,3 +1,4 @@
+from datetime import timedelta
 import environ
 from pathlib import Path
 
@@ -89,6 +90,12 @@ REST_FRAMEWORK = {
   ),
 }
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Access token muddati (5 daqiqa)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Refresh token muddati (1 kun)
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
