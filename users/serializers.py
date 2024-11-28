@@ -14,7 +14,6 @@ class SignUpSerializer(ModelSerializer):
     def validate(self, data):
         if not data['password'] == data['password_confirm']:
             raise ValidationError('Passwords do not match')
-
         return data
 
     def create(self, validated_data):
