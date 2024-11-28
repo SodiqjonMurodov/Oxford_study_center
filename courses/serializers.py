@@ -11,7 +11,7 @@ class CourseCreateSerializer(ModelSerializer):
         fields = ['id', 'name', 'image', 'description']
 
 
-class AuthorSerializer(ModelSerializer):
+class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'is_staff']
@@ -26,7 +26,7 @@ class CourseListSerializer(ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(read_only=True)
+    author = UserSerializer(read_only=True)
     class Meta:
         model = Review
         fields = ['id', 'comment', 'parent', 'author', 'created_at', 'updated_at']
@@ -43,6 +43,21 @@ class CourseDetailSerializer(ModelSerializer):
     def get_reviews(self, obj):
         reviews = obj.review_set.all()
         return ReviewSerializer(reviews, many=True).data
+    
+
+class ReviewCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['id', 'course', 'comment', 'parent', 'author']
+
+
+class RatingSerializer(ModelSerializer):
+    class Meta:
+        model = Rating
+        fields = ['id', 'course', 'author', 'rating']
+    
+
+
 
 
 

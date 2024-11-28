@@ -34,7 +34,7 @@ class Review(BaseModel):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.comment
+        return f'{self.id}'
 
     class Meta:
         verbose_name = 'Review'

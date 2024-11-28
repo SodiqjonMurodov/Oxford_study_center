@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from common.models import BaseModel
 
 MALE, FEMALE = ('male', 'female')
 
-class User(AbstractUser):
+class User(AbstractUser, BaseModel):
     GENDER_CHOICES = (
         (MALE, MALE),
         (FEMALE, FEMALE),
