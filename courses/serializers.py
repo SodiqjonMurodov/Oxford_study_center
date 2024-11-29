@@ -1,4 +1,5 @@
 from django.db.models import Avg
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from courses.models import Course, Review, Rating
@@ -34,16 +35,34 @@ class CourseDetailSerializer(ModelSerializer):
         fields = ['id', 'name', 'rating', 'status', 'image', 'description', 'reviews']
 
     def get_reviews(self, obj):
+        request = self.context.get('request')
         reviews = obj.review_set.all()
-        return ReviewSerializer(reviews, many=True).data
+
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
+        paginated_reviews = paginator.paginate_queryset(reviews, request)
+
+        return paginator.get_paginated_response(
+            ReviewSerializer(paginated_reviews, many=True, context={'request': request}).data
+        ).data
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    author = UserSerializer(read_only=True)
+    author = serializers.SerializerMethodField()
+    is_author = serializers.SerializerMethodField()
 
     class Meta:
         model = Review
-        fields = ['id', 'comment', 'parent', 'author', 'created_at', 'updated_at']
+        fields = ['id', 'comment', 'parent', 'author', 'is_author', 'created_at', 'updated_at']
+
+    def get_author(self, obj):
+        return UserSerializer(obj.author).data
+
+    def get_is_author(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return obj.author == request.user
+        return False
 
 
 class ReviewCreateUpdateSerializer(ModelSerializer):

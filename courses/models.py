@@ -54,3 +54,4 @@ class Rating(BaseModel):
         if not self.rating == [0, 1, 2, 3, 4, 5]:
             raise ValidationError('Rating must be between 0 and 5')
 
+

@@ -1,4 +1,5 @@
 from django.db.models import Avg
+from django.db.models.functions import Round
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -21,7 +22,9 @@ class CourseListAPIView(ListAPIView):
     authentication_classes = [JWTAuthentication]
 
     def get_queryset(self):
-        return Course.objects.annotate(average_rating=Avg('rating__rating'))
+        return Course.objects.annotate(
+            average_rating=Round(Avg('rating__rating') * 10) / 10
+        )
 
 
 class CourseDetailAPIView(RetrieveAPIView):
@@ -31,17 +34,19 @@ class CourseDetailAPIView(RetrieveAPIView):
     authentication_classes = [JWTAuthentication]
 
     def get_queryset(self):
-        return Course.objects.annotate(average_rating=Avg('rating__rating'))
+        return Course.objects.annotate(
+            average_rating=Round(Avg('rating__rating') * 10) / 10
+        )
 
 
 class ReviewCreateAPIView(CreateAPIView):
-    queryset = Review.objects.all()
     serializer_class = ReviewCreateUpdateSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
 
 class ReviewUpdateAPIView(UpdateAPIView):
+    queryset = Review.objects.all()
     serializer_class = ReviewCreateUpdateSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
@@ -73,25 +78,10 @@ class RatingCreateAPIView(CreateAPIView):
 
 
 class RatingUpdateAPIView(UpdateAPIView):
+    queryset = Rating.objects.all()
     serializer_class = RatingUpdateSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
-
-
-class RatingDeleteAPIView(DestroyAPIView):
-    queryset = Rating.objects.all()
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-
-    def get_queryset(self):
-        return self.queryset.filter(user=self.request.user)
-
-    def delete(self, request, *args, **kwargs):
-        super().delete(request, *args, **kwargs)
-        return Response(
-            {"detail": "Review deleted successfully."},
-            status=status.HTTP_200_OK
-        )
