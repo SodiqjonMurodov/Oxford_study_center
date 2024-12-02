@@ -48,13 +48,13 @@ class SignUpSerializer(ModelSerializer):
             raise serializers.ValidationError("Email confirmation failed.")
 
 
-# class UserConfirmationSerializer(ModelSerializer):
-#     class Meta:
-#         model = UserConfirmation
-#         fields = ['code', 'email']
-#
-#     def validate(self):
-#         user_confirmation = UserConfirmation.objects.get(code=self.validated_data['code'])
+class UserConfirmationSerializer(ModelSerializer):
+    class Meta:
+        model = UserConfirmation
+        fields = ['email', 'code']
+
+    def validate(self):
+        user_confirmation = UserConfirmation.objects.filter(code=self.validated_data['code'])
 
 
 
