@@ -2,20 +2,14 @@ from django.db.models import Avg
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-from courses.models import Course, Review, Rating
+from courses.models import Course, Review, Rating, ReviewLike
 from users.models import User
 
 
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'is_staff']
-
-
-class CourseCreateSerializer(ModelSerializer):
-    class Meta:
-        model = Course
-        fields = ['id', 'name', 'image', 'description']
+        fields = ['id', 'email', 'email', 'first_name', 'last_name', 'is_staff']
 
 
 class CourseListSerializer(ModelSerializer):
@@ -23,7 +17,7 @@ class CourseListSerializer(ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['id', 'name', 'rating', 'status', 'image']
+        fields = ['id', 'name', 'rating', 'image']
 
 
 class CourseDetailSerializer(ModelSerializer):
@@ -32,7 +26,7 @@ class CourseDetailSerializer(ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['id', 'name', 'rating', 'status', 'image', 'description', 'reviews']
+        fields = ['id', 'name', 'rating', 'image', 'description', 'reviews']
 
     def get_reviews(self, obj):
         request = self.context.get('request')
@@ -69,6 +63,12 @@ class ReviewCreateUpdateSerializer(ModelSerializer):
     class Meta:
         model = Review
         fields = ['id', 'course', 'comment', 'parent', 'author']
+
+
+class ReviewLikeUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = ReviewLike
+        fields = ['id', 'review', 'user', 'like']
 
 
 class RatingCreateSerializer(ModelSerializer):

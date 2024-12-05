@@ -53,5 +53,19 @@ class Rating(BaseModel):
     def validate(self):
         if not self.rating == [0, 1, 2, 3, 4, 5]:
             raise ValidationError('Rating must be between 0 and 5')
+        
+
+class ReviewLike(BaseModel):
+    review = models.ForeignKey(Review, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    like = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{id}'
+    
+    class Meta:
+        verbose_name = 'ReviewLike'
+        verbose_name_plural = 'ReviewLikes'
+
 
 

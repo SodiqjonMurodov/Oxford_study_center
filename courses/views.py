@@ -5,21 +5,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Course, Review, Rating
-from .serializers import CourseCreateSerializer, CourseDetailSerializer, CourseListSerializer, \
-    ReviewCreateUpdateSerializer, RatingCreateSerializer, RatingUpdateSerializer
+from .serializers import CourseDetailSerializer, CourseListSerializer, \
+    ReviewCreateUpdateSerializer, RatingCreateSerializer, RatingUpdateSerializer, ReviewLikeUpdateSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-
-class CourseCreateAPIView(CreateAPIView):
-    serializer_class = CourseCreateSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
 
 
 class CourseListAPIView(ListAPIView):
     serializer_class = CourseListSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
 
     def get_queryset(self):
         return Course.objects.annotate(
@@ -30,8 +23,6 @@ class CourseListAPIView(ListAPIView):
 class CourseDetailAPIView(RetrieveAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseDetailSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
 
     def get_queryset(self):
         return Course.objects.annotate(
@@ -48,6 +39,16 @@ class ReviewCreateAPIView(CreateAPIView):
 class ReviewUpdateAPIView(UpdateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewCreateUpdateSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def get_queryset(self):
+        return self.queryset.filter(author=self.request.user)
+    
+
+class ReviewLikeUpdateAPIView(UpdateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewLikeUpdateSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
