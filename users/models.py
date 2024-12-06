@@ -38,7 +38,6 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         (FEMALE, FEMALE),
     )
     email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=150, blank=True, null=True)
     fullname = models.CharField(max_length=150, blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True, blank=True)
@@ -53,10 +52,6 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     def __str__(self):
         return f'{self.email}'
-
-    @property
-    def full_name(self):
-        return f'{self.first_name} {self.last_name}'
 
     class Meta:
         verbose_name = 'User'

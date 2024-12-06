@@ -9,7 +9,7 @@ from users.models import User
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'email', 'first_name', 'last_name', 'is_staff']
+        fields = ['id', 'email', 'fullname']
 
 
 class CourseListSerializer(ModelSerializer):
@@ -47,14 +47,14 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ['id', 'comment', 'parent', 'author', 'is_author', 'created_at', 'updated_at']
+        fields = ['id', 'comment', 'parent', 'author', 'is_author', 'updated_at']
 
     def get_author(self, obj):
         return UserSerializer(obj.author).data
 
     def get_is_author(self, obj):
         request = self.context.get('request')
-        if request and request.user.is_authenticated:
+        if request:
             return obj.author == request.user
         return False
 
@@ -88,3 +88,4 @@ class RatingUpdateSerializer(ModelSerializer):
     class Meta:
         model = Rating
         fields = ['id', 'course', 'user', 'rating']
+

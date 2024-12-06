@@ -1,7 +1,7 @@
 from django.db.models import Avg
 from django.db.models.functions import Round
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView, DestroyAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Course, Review, Rating
@@ -23,12 +23,14 @@ class CourseListAPIView(ListAPIView):
 class CourseDetailAPIView(RetrieveAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseDetailSerializer
+    permission_classes = [AllowAny]
+    authentication_classes = [JWTAuthentication]
 
     def get_queryset(self):
         return Course.objects.annotate(
             average_rating=Round(Avg('rating__rating') * 10) / 10
         )
-
+    
 
 class ReviewCreateAPIView(CreateAPIView):
     serializer_class = ReviewCreateUpdateSerializer
