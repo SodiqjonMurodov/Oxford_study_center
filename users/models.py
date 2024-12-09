@@ -5,7 +5,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now, timedelta
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from phonenumber_field.modelfields import PhoneNumberField
 from common.models import BaseModel
 
 NEW, CODE_VERIFIED, DONE, PHOTO_DONE = ('new', 'code_verified', 'done', 'photo_done')
@@ -50,7 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     fullname = models.CharField(max_length=150, blank=True, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True, blank=True)
-    phone_number = models.CharField(max_length=15, null=True, blank=True)
+    phone_number = PhoneNumberField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 

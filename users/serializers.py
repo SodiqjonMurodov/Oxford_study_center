@@ -1,17 +1,15 @@
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth.password_validation import validate_password
 from django.db.models import Q
-from rest_framework.exceptions import PermissionDenied, NotFound
+from rest_framework.exceptions import NotFound
 from rest_framework.generics import get_object_or_404
-from rest_framework.serializers import ModelSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
-from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
-from common.utils import send_confirmation_email, check_email
+from common.utils import send_confirmation_email, check_email, check_phone_number
 from .models import User, UserConfirmation, CODE_VERIFIED, DONE, NEW
 
 
@@ -65,6 +63,7 @@ class ChangeUserInformation(serializers.Serializer):
     def validate(self, data):
         password = data.get('password')
         confirm_password = data.get('confirm_password')
+        phone_number = data.get('phone_number')
 
         if password != confirm_password:
             raise serializers.ValidationError(
@@ -74,6 +73,7 @@ class ChangeUserInformation(serializers.Serializer):
                 }
             )
         validate_password(password)
+        check_phone_number(phone_number)
         return data
 
     def update(self, instance, validated_data):
