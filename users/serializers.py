@@ -1,80 +1,98 @@
+from django.contrib.auth.models import update_last_login
 from django.contrib.auth.password_validation import validate_password
+from django.db.models import Q
+from rest_framework.exceptions import PermissionDenied, NotFound
+from rest_framework.generics import get_object_or_404
 from rest_framework.serializers import ModelSerializer
-from django.core.validators import validate_email
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.settings import api_settings
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from common.utils import send_confirmation_email
-from .models import User, UserConfirmation
+from rest_framework.serializers import ValidationError
+from common.utils import send_confirmation_email, check_email
+from .models import User, UserConfirmation, CODE_VERIFIED, DONE, NEW
 
 
-class SignUpSerializer(ModelSerializer):
-    password_confirm = serializers.CharField(write_only=True)
+class SignUpSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'password_confirm']
-
-    def validate_email(self, value):
-        try:
-            validate_email(value)
-        except serializers.ValidationError:
-            raise serializers.ValidationError("Invalid email format.")
-
-        if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("This email is already registered.")
-
-        return value
-
-    def validate(self, data):
-        if data['password'] != data['password_confirm']:
-            raise serializers.ValidationError("Passwords do not match")
-        validate_password(data['password'])
-        return data
-
-    def create(self, validated_data):
-        validated_data.pop('password_confirm')
-        user = super(SignUpSerializer, self).create(validated_data)
-        try:
-            # Create code to user confirmation
-            code = user.create_verify_code()
-            mess = send_confirmation_email(user.email, code)
-            user.save()
-            return user
-        except Exception:
-            raise serializers.ValidationError("Email confirmation failed.")
-
-
-class UserConfirmationSerializer(ModelSerializer):
-    class Meta:
-        model = UserConfirmation
-        fields = ['email', 'code']
-
-    def validate(self):
-        user_confirmation = UserConfirmation.objects.filter(code=self.validated_data['code'])
-
-
-
-
-
-
-class UserProfileSerializer(ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'date_of_birth', 'gender', 'phone_number']
+        fields = (
+            'id',
+            'email',
+            'auth_status'
+        )
         extra_kwargs = {
-            'first_name': {'required': True},
-            'last_name': {'required': True},
-            'date_of_birth': {'required': True},
-            'gender': {'required': True},
-            'phone_number': {'required': True},
+            'auth_status': {'read_only': True, 'required': False}
         }
 
+    def create(self, validated_data):
+        user = super(SignUpSerializer, self).create(validated_data)
+        code = user.create_verify_code()
+        send_confirmation_email(user.email, code)
+        user.save()
+        return user
 
-class EmailTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate_email(self, value):
+        email = value.lower()
+        if value and User.objects.filter(email=value).exists():
+            data = {
+                "success": False,
+                "message": "This email already exists in the database"
+            }
+            raise ValidationError(data)
+        else:
+            check_email(email)
+            return email
+
+    def to_representation(self, instance):
+        data = super(SignUpSerializer, self).to_representation(instance)
+        data.update(instance.token())
+        return data
+
+
+class ChangeUserInformation(serializers.Serializer):
+    fullname = serializers.CharField(required=True)
+    password = serializers.CharField(write_only=True, required=True)
+    confirm_password = serializers.CharField(write_only=True, required=True)
+    date_of_birth = serializers.DateField(required=False)
+    gender = serializers.ChoiceField(choices=User.GENDER_CHOICES, required=False)
+    phone_number = serializers.CharField(required=False)
+
+    def validate(self, data):
+        password = data.get('password')
+        confirm_password = data.get('confirm_password')
+
+        if password != confirm_password:
+            raise serializers.ValidationError(
+                {
+                    "success": False,
+                    "message": "Your password values do not match"
+                }
+            )
+        validate_password(password)
+        return data
+
+    def update(self, instance, validated_data):
+        instance.fullname = validated_data.get('fullname', instance.fullname)
+        instance.date_of_birth = validated_data.get('date_of_birth', instance.date_of_birth)
+        instance.gender = validated_data.get('gender', instance.gender)
+        instance.phone_number = validated_data.get('phone_number', instance.phone_number)
+
+        if validated_data.get('password'):
+            instance.set_password(validated_data['password'])
+
+        if hasattr(instance, 'auth_status') and instance.auth_status == CODE_VERIFIED:
+            instance.auth_status = DONE
+
+        instance.save()
+        return instance
+
+
+class LoginSerializer(TokenObtainPairSerializer):
     username_field = 'email'
 
     def validate(self, attrs):
@@ -90,26 +108,84 @@ class EmailTokenObtainPairSerializer(TokenObtainPairSerializer):
         if not user.is_active:
             raise serializers.ValidationError("This account is inactive.")
 
+        current_user = User.objects.filter(email__iexact=email).first()
+
+        if current_user is not None and current_user.auth_status in [NEW, CODE_VERIFIED]:
+            raise ValidationError(
+                {
+                    'success': False,
+                    'message': "You are not fully registered!",
+                    'auth_status': current_user.auth_status
+                }
+            )
+
         data = super().validate(attrs)
         return data
 
 
-class EmailTokenRefreshSerializer(TokenRefreshSerializer):
+class LoginRefreshSerializer(TokenRefreshSerializer):
+
     def validate(self, attrs):
-        refresh = attrs.get("refresh")
+        data = super().validate(attrs)
+        access_token_instance = AccessToken(data['access'])
+        user_id = access_token_instance['user_id']
+        user = get_object_or_404(User, id=user_id)
+        update_last_login(None, user)
+        return data
 
-        if not refresh:
-            raise serializers.ValidationError({"refresh": "This field is required."})
 
-        try:
-            token = RefreshToken(refresh)
-            data = {"access": str(token.access_token)}
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
 
-            # Optionally include additional user information in the response
-            if api_settings.UPDATE_LAST_LOGIN:
-                user = token.user
-                data["email"] = user.email  # Include the user's email in the response
 
-            return data
-        except Exception as e:
-            raise serializers.ValidationError({"refresh": "Invalid refresh token."})
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.CharField(write_only=True, required=True)
+
+    def validate(self, attrs):
+        email = attrs.get('email', None)
+        if email is None:
+            raise ValidationError(
+                {
+                    "success": False,
+                    'message': "Email is required!"
+                }
+            )
+        user = User.objects.filter(email=email)
+        if not user.exists():
+            raise NotFound(detail="User not found")
+        attrs['user'] = user.first()
+        return attrs
+
+
+class ResetPasswordSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=True)
+    password = serializers.CharField(min_length=8, required=True, write_only=True)
+    confirm_password = serializers.CharField(min_length=8, required=True, write_only=True)
+
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'password',
+            'confirm_password'
+        )
+
+    def validate(self, data):
+        password = data.get('password', None)
+        confirm_password = data.get('password', None)
+        if password != confirm_password:
+            raise ValidationError(
+                {
+                    'success': False,
+                    'message': "Parollaringiz qiymati bir-biriga teng emas"
+                }
+            )
+        if password:
+            validate_password(password)
+        return data
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password')
+        instance.set_password(password)
+        return super(ResetPasswordSerializer, self).update(instance, validated_data)
+
