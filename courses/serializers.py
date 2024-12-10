@@ -1,21 +1,14 @@
-from django.db.models import Avg
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-from courses.models import Course, Review, Rating
+from courses.models import Course, Review, Rating, Feedback
 from users.models import User
 
 
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'is_staff']
-
-
-class CourseCreateSerializer(ModelSerializer):
-    class Meta:
-        model = Course
-        fields = ['id', 'name', 'image', 'description']
+        fields = ['id', 'email', 'fullname']
 
 
 class CourseListSerializer(ModelSerializer):
@@ -23,28 +16,32 @@ class CourseListSerializer(ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['id', 'name', 'rating', 'status', 'image']
+        fields = ['id', 'name', 'rating', 'image']
 
 
-class CourseDetailSerializer(ModelSerializer):
+class CourseDetailSerializer(serializers.ModelSerializer):
     rating = serializers.FloatField(source='average_rating', read_only=True)
     reviews = serializers.SerializerMethodField()
+    views = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
-        fields = ['id', 'name', 'rating', 'status', 'image', 'description', 'reviews']
+        fields = ['id', 'name', 'rating', 'image', 'description', 'views', 'reviews']
 
     def get_reviews(self, obj):
         request = self.context.get('request')
-        reviews = obj.review_set.all()
-
+        reviews = obj.reviews.all()
+        # Pagination
         paginator = PageNumberPagination()
-        paginator.page_size = 10
+        paginator.page_size = 15
         paginated_reviews = paginator.paginate_queryset(reviews, request)
 
         return paginator.get_paginated_response(
             ReviewSerializer(paginated_reviews, many=True, context={'request': request}).data
         ).data
+
+    def get_views(self, obj):
+        return obj.views.count()
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -53,7 +50,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ['id', 'comment', 'parent', 'author', 'is_author', 'created_at', 'updated_at']
+        fields = ['id', 'comment', 'parent', 'author', 'is_author', 'updated_at']
 
     def get_author(self, obj):
         return UserSerializer(obj.author).data
@@ -71,20 +68,32 @@ class ReviewCreateUpdateSerializer(ModelSerializer):
         fields = ['id', 'course', 'comment', 'parent', 'author']
 
 
-class RatingCreateSerializer(ModelSerializer):
+class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = ['id', 'course', 'user', 'rating']
+        read_only_fields = ['user']
 
     def validate(self, attrs):
-        user = attrs.get('user')
+        request = self.context.get('request')
+        user = request.user
         course = attrs.get('course')
-        if Rating.objects.filter(user=user, course=course).exists():
+        if self.instance is None and Rating.objects.filter(user=user, course=course).exists():
             raise serializers.ValidationError("You have already rated this course.")
         return attrs
 
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
 
-class RatingUpdateSerializer(ModelSerializer):
+
+class FeedbackSerializer(ModelSerializer):
+    course = CourseListSerializer(read_only=True, required=True)
+
     class Meta:
-        model = Rating
-        fields = ['id', 'course', 'user', 'rating']
+        model = Feedback
+        fields = ['id', 'fullname', 'course', 'email', 'message']
+
+
+
+

@@ -5,7 +5,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.exceptions import TokenError
-
 from common.utils import send_confirmation_email
 from users.models import User, NEW, CODE_VERIFIED
 from rest_framework.serializers import ValidationError
@@ -28,7 +27,6 @@ class VerifyAPIView(APIView):
     def post(self, request, *args, **kwargs):
         user = self.request.user
         code = self.request.data.get('code')
-
         self.check_verify(user, code)
         return Response(
             data={

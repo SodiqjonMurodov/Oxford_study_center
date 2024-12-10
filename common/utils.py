@@ -3,8 +3,8 @@ import phonenumbers
 from django.core.mail import send_mail
 from rest_framework.serializers import ValidationError
 
-
 email_regex = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b")
+
 
 def check_email(email):
     if not re.fullmatch(email_regex, email):
@@ -36,10 +36,18 @@ def check_phone_number(phone_number):
         raise ValidationError(data)
 
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
 
 def send_confirmation_email(email, code):
     send_mail(
-        subject = 'Код подтверждение',
+        subject='Код подтверждение',
         message=f'Ваш код подтверждения в Oxford: {code}',
         html_message=f"""
             <h4>Ваш код подтверждения в Oxford:</h4>
@@ -50,5 +58,3 @@ def send_confirmation_email(email, code):
         recipient_list=[email],
         fail_silently=False,
     )
-
-
