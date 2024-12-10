@@ -1,6 +1,8 @@
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
+
+from common.utils import check_phone_number
 from courses.models import Course, Review, Rating, Feedback
 from users.models import User
 
@@ -92,7 +94,12 @@ class FeedbackSerializer(ModelSerializer):
 
     class Meta:
         model = Feedback
-        fields = ['id', 'fullname', 'course', 'email', 'message']
+        fields = ['id', 'fullname', 'course', 'phone_number', 'message']
+
+    def validate(self, attrs):
+        phone = attrs.get('phone_number')
+        check_phone_number(phone)
+        return attrs
 
 
 
