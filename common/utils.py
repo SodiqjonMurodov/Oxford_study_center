@@ -31,7 +31,7 @@ def check_phone_number(phone_number):
     except phonenumbers.phonenumberutil.NumberParseException:
         data = {
             "success": False,
-            "message": "invalid phone region"
+            "message": "Invalid phone region"
         }
         raise ValidationError(data)
 
@@ -58,3 +58,7 @@ def send_confirmation_email(email, code):
         recipient_list=[email],
         fail_silently=False,
     )
+
+
+
+

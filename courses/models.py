@@ -59,7 +59,7 @@ class ReviewLike(models.Model):
 
 
 class Rating(BaseModel):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="grades")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.PositiveIntegerField(default=0)
 

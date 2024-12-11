@@ -23,17 +23,19 @@ class CourseListSerializer(ModelSerializer):
 
 class CourseDetailSerializer(serializers.ModelSerializer):
     rating = serializers.FloatField(source='average_rating', read_only=True)
+    grades_count = serializers.SerializerMethodField()
+    views_count = serializers.SerializerMethodField()
+    reviews_count = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
-    views = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
-        fields = ['id', 'name', 'rating', 'image', 'description', 'views', 'reviews']
+        fields = ['id', 'name', 'rating', 'image', 'description', 'grades_count', 'views_count', 'reviews_count', 'reviews']
 
     def get_reviews(self, obj):
         request = self.context.get('request')
         reviews = obj.reviews.all()
-        # Pagination
+        # Paginator
         paginator = PageNumberPagination()
         paginator.page_size = 15
         paginated_reviews = paginator.paginate_queryset(reviews, request)
@@ -41,8 +43,14 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         return paginator.get_paginated_response(
             ReviewSerializer(paginated_reviews, many=True, context={'request': request}).data
         ).data
+    
+    def get_grades_count(self, obj):
+        return obj.grades.count()
+    
+    def get_reviews_count(self, obj):
+        return obj.reviews.count()
 
-    def get_views(self, obj):
+    def get_views_count(self, obj):
         return obj.views.count()
 
 
