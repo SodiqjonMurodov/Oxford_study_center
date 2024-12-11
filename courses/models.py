@@ -45,6 +45,19 @@ class Review(BaseModel):
         verbose_name_plural = 'Reviews'
 
 
+class ReviewLike(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="likes")
+    review = models.ForeignKey('Review', on_delete=models.CASCADE, related_name="likes")
+
+    def __str__(self):
+        return f'{self.id}'
+
+    class Meta:
+        unique_together = ('user', 'review')
+        verbose_name = 'Review Like'
+        verbose_name_plural = 'Review Likes'
+
+
 class Rating(BaseModel):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

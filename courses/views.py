@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from common.utils import get_client_ip
-from .models import Course, Review, Rating, CourseView
+from .models import Course, Review, Rating, CourseView, ReviewLike
 from .serializers import CourseDetailSerializer, CourseListSerializer, \
     ReviewCreateUpdateSerializer, RatingSerializer, FeedbackSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -72,6 +72,18 @@ class ReviewDeleteAPIView(DestroyAPIView):
 
     def get_queryset(self):
         return self.queryset.filter(author=self.request.user)
+    
+
+class ReviewLikeToggleView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, comment_id):
+        comment = Review.objects.get(id=comment_id)
+        like, created = ReviewLike.objects.get_or_create(user=request.user, comment=comment)
+        if not created:
+            like.delete()
+            return Response({"detail": "Like removed"}, status=status.HTTP_200_OK)
+        return Response({"detail": "Like added"}, status=status.HTTP_201_CREATED)
 
 
 class RatingAPIView(APIView):
