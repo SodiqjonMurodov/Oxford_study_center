@@ -18,7 +18,7 @@ class CourseListAPIView(ListAPIView):
 
     def get_queryset(self):
         return Course.objects.annotate(
-            average_rating=Round(Avg('rating__rating') * 10) / 10
+            average_rating=Round(Avg('grades__rating') * 10) / 10
         )
 
 
@@ -38,7 +38,7 @@ class CourseDetailAPIView(RetrieveAPIView):
 
     def get_queryset(self):
         return Course.objects.annotate(
-            average_rating=Round(Avg('rating__rating') * 10) / 10
+            average_rating=Round(Avg('grades__rating') * 10) / 10
         )
 
 

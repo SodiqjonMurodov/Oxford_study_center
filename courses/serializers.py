@@ -79,7 +79,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     def get_is_user_liked(self, obj):
         user = self.context.get('request').user
         if user.is_authenticated:
-            return obj.likes.filter(user=user, like=True).exists()
+            return obj.likes.filter(user=user).exists()
         return False
 
 
@@ -87,12 +87,6 @@ class ReviewCreateUpdateSerializer(ModelSerializer):
     class Meta:
         model = Review
         fields = ['id', 'course', 'comment', 'parent', 'author']
-
-
-class ReviewLikeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ReviewLike
-        fields = ['id', 'user', 'review', 'like', 'created_at']
 
 
 class RatingSerializer(serializers.ModelSerializer):
