@@ -2,12 +2,17 @@
 
 Keyin quyidagi kodlarni ketma-ket yozib chiqiladi (bu buyruqlar konsolda proyekt ichidan yoziladi)
 
-python -m venv .venv
+1) python -m venv .venv
 
-pip install -r requirements.txt
+2) pip install -r requirements.txt
 
-.venv/Scripts/activate
+3) .venv/Scripts/activate
 
-py manage.py runserver
+4) py manage.py makemigrations
 
-Oxirgi 2 ta buyruq har safar serverni yoqish uchun ishlatiladi.
+5) py manage.py migrate
+
+6) py manage.py runserver
+
+3 keyin 6 buyruqlar har safar serverni yoqish uchun ishlatiladi.
+Agar gitdan pull qilinsa 3, 4, 5, 6 buyruqlar ketma-ket yoziladi.

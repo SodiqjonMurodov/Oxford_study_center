@@ -56,14 +56,10 @@ class ChangeUserInformation(serializers.Serializer):
     fullname = serializers.CharField(required=True)
     password = serializers.CharField(write_only=True, required=True)
     confirm_password = serializers.CharField(write_only=True, required=True)
-    date_of_birth = serializers.DateField(required=False)
-    gender = serializers.ChoiceField(choices=User.GENDER_CHOICES, required=False)
-    phone_number = serializers.CharField(required=False)
 
     def validate(self, data):
         password = data.get('password')
         confirm_password = data.get('confirm_password')
-        phone_number = data.get('phone_number')
 
         if password != confirm_password:
             raise serializers.ValidationError(
@@ -73,14 +69,10 @@ class ChangeUserInformation(serializers.Serializer):
                 }
             )
         validate_password(password)
-        check_phone_number(phone_number)
         return data
 
     def update(self, instance, validated_data):
         instance.fullname = validated_data.get('fullname', instance.fullname)
-        instance.date_of_birth = validated_data.get('date_of_birth', instance.date_of_birth)
-        instance.gender = validated_data.get('gender', instance.gender)
-        instance.phone_number = validated_data.get('phone_number', instance.phone_number)
 
         if validated_data.get('password'):
             instance.set_password(validated_data['password'])
