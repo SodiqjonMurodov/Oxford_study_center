@@ -15,10 +15,22 @@ class UserSerializer(ModelSerializer):
 
 class CourseListSerializer(ModelSerializer):
     rating = serializers.FloatField(source='average_rating', read_only=True)
+    grades_count = serializers.SerializerMethodField()
+    views_count = serializers.SerializerMethodField()
+    reviews_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
-        fields = ['id', 'name', 'rating', 'image']
+        fields = ['id', 'name', 'rating', 'image', 'description', 'grades_count', 'views_count', 'reviews_count']
+
+    def get_grades_count(self, obj):
+        return obj.grades.count()
+
+    def get_reviews_count(self, obj):
+        return obj.reviews.count()
+
+    def get_views_count(self, obj):
+        return obj.views.count()
 
 
 class CourseDetailSerializer(serializers.ModelSerializer):

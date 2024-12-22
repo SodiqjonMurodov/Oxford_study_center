@@ -93,6 +93,7 @@ class ChangeUserInformationView(UpdateAPIView):
         data = {
             'success': True,
             "message": "User updated successfully",
+            "user_id": user.id,
             "access": user.token()['access'],
             "refresh": user.token()['refresh_token'],
             'auth_status': self.request.user.auth_status,

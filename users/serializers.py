@@ -112,6 +112,7 @@ class LoginSerializer(TokenObtainPairSerializer):
             )
 
         data = super().validate(attrs)
+        data['user_id'] = user.id
         return data
 
 
