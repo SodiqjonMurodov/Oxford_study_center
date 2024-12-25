@@ -7,8 +7,8 @@ urlpatterns = [
     path('courses/<slug:pk>', CourseDetailAPIView.as_view(), name='course-detail'),
 
     path('review/create/', ReviewCreateAPIView.as_view(), name='review-create'),
-    path('review/update/<slug:pk>', ReviewUpdateAPIView.as_view(), name='review-update'),
-    path('review/delete/<slug:pk>', ReviewDeleteAPIView.as_view(), name='review-delete'),
+    path('review/update/<uuid:pk>/', ReviewUpdateAPIView.as_view(), name='review-update'),
+    path('review/delete/<uuid:pk>/', ReviewDeleteAPIView.as_view(), name='review-delete'),
     path('review/<slug:comment_id>/like/', ReviewLikeToggleView.as_view(), name='review-like'),
 
     path('rating/', RatingAPIView.as_view(), name='rating'),
