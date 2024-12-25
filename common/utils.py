@@ -31,7 +31,7 @@ def check_phone_number(phone_number):
     except phonenumbers.phonenumberutil.NumberParseException:
         data = {
             "success": False,
-            "message": "Invalid phone region"
+            "message": "invalid phone region"
         }
         raise ValidationError(data)
 

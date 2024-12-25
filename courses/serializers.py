@@ -1,8 +1,9 @@
+from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 
-from common.utils import check_phone_number
+from common.utils import check_phone_number, check_email
 from courses.models import Course, Review, Rating, Feedback, ReviewLike
 from users.models import User
 
@@ -121,14 +122,18 @@ class RatingSerializer(serializers.ModelSerializer):
 
 
 class FeedbackSerializer(ModelSerializer):
-    course = CourseListSerializer(required=True)
-    phone_number = serializers.CharField(required=True)
-
     class Meta:
         model = Feedback
-        fields = ['id', 'fullname', 'course', 'phone_number', 'message']
+        fields = ['id', 'fullname', 'age', 'email', 'course', 'phone_number', 'message']
+
+    def validate_course(self, value):
+        if not Course.objects.filter(id=value.id).exists():
+            raise serializers.ValidationError("Invalid course ID provided.")
+        return value
 
     def validate(self, attrs):
+        email = attrs.get('email')
+        check_email(email)
         phone = attrs.get('phone_number')
         check_phone_number(phone)
         return attrs

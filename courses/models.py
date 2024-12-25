@@ -74,8 +74,10 @@ class Rating(BaseModel):
 
 class Feedback(BaseModel):
     fullname = models.CharField(max_length=150)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE)
-    phone_number = PhoneNumberField()
+    age = models.IntegerField(blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="feedbacks")
+    phone_number = models.CharField(max_length=15)
     message = models.TextField()
 
     def __str__(self):

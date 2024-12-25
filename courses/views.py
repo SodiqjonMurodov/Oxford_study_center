@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from common.utils import get_client_ip
-from .models import Course, Review, Rating, CourseView, ReviewLike
+from .models import Course, Review, Rating, CourseView, ReviewLike, Feedback
 from .serializers import CourseDetailSerializer, CourseListSerializer, \
     ReviewCreateUpdateSerializer, RatingSerializer, FeedbackSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -113,9 +113,11 @@ class RatingAPIView(APIView):
 
 
 class FeedbackFormCreateAPIView(CreateAPIView):
+    queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
+
 
 
 
