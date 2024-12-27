@@ -39,7 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     AUTH_STATUS = (
         (NEW, NEW),
         (CODE_VERIFIED, CODE_VERIFIED),
-        (DONE, DONE)
+        (DONE, DONE),
     )
     GENDER_CHOICES = (
         (MALE, MALE),
@@ -119,8 +119,8 @@ class UserConfirmation(BaseModel):
         return f'{self.user}'
 
     class Meta:
-        verbose_name = _('User Confirmation')
-        verbose_name_plural = _('User Confirmations')
+        verbose_name = 'User Confirmation'
+        verbose_name_plural = 'User Confirmations'
 
     def save(self, *args, **kwargs):
         if not self.pk or self.is_confirmed == False:

@@ -1,5 +1,4 @@
 from django.db import models
-from phonenumber_field.formfields import PhoneNumberField
 from rest_framework.exceptions import ValidationError
 from common.models import BaseModel
 from users.models import User
