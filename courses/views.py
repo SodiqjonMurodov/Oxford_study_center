@@ -79,7 +79,7 @@ class ReviewLikeToggleView(APIView):
 
     def post(self, request, comment_id):
         comment = Review.objects.get(id=comment_id)
-        like, created = ReviewLike.objects.get_or_create(user=request.user, comment=comment)
+        like, created = ReviewLike.objects.get_or_create(user=request.user, review=comment)
         if not created:
             like.delete()
             return Response({"detail": "Like removed"}, status=status.HTTP_200_OK)
@@ -115,9 +115,5 @@ class RatingAPIView(APIView):
 class FeedbackFormCreateAPIView(CreateAPIView):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-
-
-
+    permission_classes = [AllowAny]
 
