@@ -44,12 +44,12 @@ LOCAL_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'corsheaders',
+    'drf_yasg',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-    'drf_yasg',
     'phonenumber_field',
+    'corsheaders',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -152,7 +152,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -162,8 +164,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CSRF_TRUSTED_ORIGINS = list(env('CSRF_TRUSTED_ORIGINS').split(','))
+
 # CORSHEADERS CONFIGURATIONS
-CORS_ALLOWED_ORIGINS = list(env('ALLOWED_HOSTS').split(','))
+CORS_ALLOWED_ORIGINS = list(env('CORS_ALLOWED_ORIGINS').split(','))
 
 CORS_ALLOW_HEADERS = (
     "accept",
@@ -181,3 +185,7 @@ EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_USE_TLS = env("EMAIL_USE_TLS")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+
+# IMAGE LIMIT
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB
+
