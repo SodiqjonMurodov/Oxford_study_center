@@ -166,10 +166,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORSHEADERS CONFIGURATIONS
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:9000",
-]
+CORS_ALLOWED_ORIGINS = list(env('ALLOWED_HOSTS').split(','))
 
 CORS_ALLOW_HEADERS = (
     "accept",
