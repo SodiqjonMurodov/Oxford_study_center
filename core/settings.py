@@ -50,7 +50,6 @@ THIRD_PARTY_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',
     'phonenumber_field',
-    'whitenoise.runserver_nostatic',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
