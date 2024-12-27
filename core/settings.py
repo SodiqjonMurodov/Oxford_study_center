@@ -1,7 +1,7 @@
-from datetime import timedelta
 import environ
-from pathlib import Path
 import dj_database_url
+from pathlib import Path
+from datetime import timedelta
 
 env = environ.Env(
     DEBUG=(bool, False)
@@ -67,8 +67,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
@@ -113,7 +111,9 @@ SIMPLE_JWT = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=env('DATABASE_URL'))
+    'default': dj_database_url.config(
+        default=env('DATABASE_URL')
+    )
 }
 
 
@@ -141,12 +141,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru'
 
-LANGUAGES = [
-    ('uz', 'Uzbek'),
-    ('ru', 'Russian'),
-    ('en', 'English'),
-]
-
 TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True
@@ -159,7 +153,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
