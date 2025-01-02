@@ -1,3 +1,4 @@
+from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -19,14 +20,13 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
-
-    # API's
-    path('api/users/', include('users.urls'), name='users'),
-    path('api/', include('courses.urls'), name='courses'),
-
-    # Swagger
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
+
+urlpatterns += i18n_patterns(
+    path('api/users/', include('users.urls'), name='users'),
+    path('api/', include('courses.urls'), name='courses'),
+)
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

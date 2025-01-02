@@ -1,10 +1,11 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from courses.models import Course, Rating, Review, Feedback
+from modeltranslation.admin import TranslationAdmin
 
 
 @admin.register(Course)
-class CourseModelAdmin(admin.ModelAdmin):
+class CourseTranslationAdmin(TranslationAdmin):
     list_display = ['id', 'name', 'image_tag', 'created_at']
 
     def image_tag(self, obj):
@@ -24,6 +25,10 @@ class RatingModelAdmin(admin.ModelAdmin):
 class ReviewModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'course', 'author', 'parent', 'comment']
 
+
 @admin.register(Feedback)
 class FeedbackModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'course', 'message', 'created_at']
+
+
+

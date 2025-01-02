@@ -28,6 +28,7 @@ ALLOWED_HOSTS = list(env('ALLOWED_HOSTS').split(','))
 # Application definition
 
 DJANGO_APPS = [
+    'modeltranslation',  # third party app
     'jazzmin', # third party app
     'django.contrib.admin',
     'django.contrib.auth',
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -146,6 +148,16 @@ USE_I18N = True
 
 USE_TZ = True
 
+gettext = lambda s: s
+LANGUAGES = [
+    ('uz', gettext('Uzbek')),
+    ('ru', gettext('Russian')),
+    ('en', gettext('English')),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale/',
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

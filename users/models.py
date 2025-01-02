@@ -9,7 +9,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 from common.models import BaseModel
 
 NEW, CODE_VERIFIED, DONE, PHOTO_DONE = ('new', 'code_verified', 'done', 'photo_done')
-MALE, FEMALE = ('male', 'female')
 EMAIL_EXPIRE_TIME = 2
 
 
@@ -42,17 +41,17 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         (DONE, DONE),
     )
     GENDER_CHOICES = (
-        (MALE, MALE),
-        (FEMALE, FEMALE),
+        ('MALE', _('Male')),
+        ('FEMALE', _('Female')),
     )
-    email = models.EmailField(unique=True)
-    auth_status = models.CharField(max_length=31, choices=AUTH_STATUS, default=NEW)
-    fullname = models.CharField(max_length=150, blank=True, null=True)
-    date_of_birth = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True, blank=True)
-    phone_number = PhoneNumberField(null=True, blank=True)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
+    email = models.EmailField(_('email'), unique=True)
+    auth_status = models.CharField(_('auth status'), max_length=31, choices=AUTH_STATUS, default=NEW)
+    fullname = models.CharField('fullname', max_length=150, blank=True, null=True)
+    date_of_birth = models.DateField('date of birth', null=True, blank=True)
+    gender = models.CharField(_('gender'), max_length=6, choices=GENDER_CHOICES, null=True, blank=True)
+    phone_number = PhoneNumberField(_('phone number'), null=True, blank=True)
+    is_active = models.BooleanField(_('is active'), default=True)
+    is_staff = models.BooleanField(_('login to the admin panel'), default=False)
 
     objects = CustomUserManager()
 
@@ -63,8 +62,8 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         return f'{self.email}'
 
     class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
+        verbose_name = _('User')
+        verbose_name_plural = _('Users')
 
     def create_verify_code(self):
         code = "".join([str(random.randint(0, 100) % 10) for _ in range(4)])
@@ -110,17 +109,17 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
 
 class UserConfirmation(BaseModel):
-    code = models.CharField(max_length=4)
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='verify_codes')
-    expiration_time = models.DateTimeField(null=True, blank=True)
-    is_confirmed = models.BooleanField(default=False)
+    code = models.CharField(_('code'), max_length=4)
+    user = models.ForeignKey(to='users.User', on_delete=models.CASCADE, related_name='verify_codes', verbose_name=_('user'))
+    expiration_time = models.DateTimeField(_('expiration time'), null=True, blank=True)
+    is_confirmed = models.BooleanField(_('is confirmed'), default=False)
 
     def __str__(self):
         return f'{self.user}'
 
     class Meta:
-        verbose_name = 'User Confirmation'
-        verbose_name_plural = 'User Confirmations'
+        verbose_name = _('User Confirmation')
+        verbose_name_plural = _('User Confirmations')
 
     def save(self, *args, **kwargs):
         if not self.pk or self.is_confirmed == False:

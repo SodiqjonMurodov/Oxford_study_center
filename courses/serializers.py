@@ -1,10 +1,8 @@
-from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-
 from common.utils import check_phone_number, check_email
-from courses.models import Course, Review, Rating, Feedback, ReviewLike
+from courses.models import Course, Review, Rating, Feedback
 from users.models import User
 
 
@@ -43,7 +41,8 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['id', 'name', 'rating', 'image', 'description', 'grades_count', 'views_count', 'reviews_count', 'reviews']
+        fields = ['id', 'name', 'rating', 'image', 'description', 'grades_count', 'views_count', 'reviews_count',
+                  'reviews']
 
     def get_reviews(self, obj):
         request = self.context.get('request')
@@ -56,10 +55,10 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         return paginator.get_paginated_response(
             ReviewSerializer(paginated_reviews, many=True, context={'request': request}).data
         ).data
-    
+
     def get_grades_count(self, obj):
         return obj.grades.count()
-    
+
     def get_reviews_count(self, obj):
         return obj.reviews.count()
 
@@ -75,11 +74,12 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ['id', 'comment', 'parent', 'author', 'is_author', 'likes_count', 'is_user_liked', 'created_at', 'updated_at']
+        fields = ['id', 'comment', 'parent', 'author', 'is_author', 'likes_count', 'is_user_liked', 'created_at',
+                  'updated_at']
 
     def get_author(self, obj):
         return UserSerializer(obj.author).data
-    
+
     def get_likes_count(self, obj):
         return obj.likes.count()
 
@@ -88,7 +88,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         if request and request.user.is_authenticated:
             return obj.author == request.user
         return False
-    
+
     def get_is_user_liked(self, obj):
         user = self.context.get('request').user
         if user.is_authenticated:

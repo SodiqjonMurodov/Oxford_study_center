@@ -1,0 +1,203 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-02 20:34+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: .\common\models.py:9
+msgid "created at"
+msgstr "created at"
+
+#: .\common\models.py:10
+msgid "updated at"
+msgstr "updated at"
+
+#: .\core\settings.py:153
+msgid "Uzbek"
+msgstr "Uzbek"
+
+#: .\core\settings.py:154
+msgid "Russian"
+msgstr "Russian"
+
+#: .\core\settings.py:155
+msgid "English"
+msgstr "English"
+
+#: .\courses\models.py:9
+msgid "name"
+msgstr "name"
+
+#: .\courses\models.py:10
+msgid "image"
+msgstr "image"
+
+#: .\courses\models.py:11
+msgid "description"
+msgstr "description"
+
+#: .\courses\models.py:17
+msgid "Course"
+msgstr "Course"
+
+#: .\courses\models.py:18
+msgid "Courses"
+msgstr "Courses"
+
+#: .\courses\models.py:22 .\courses\models.py:35 .\courses\models.py:62
+#: .\courses\models.py:79
+msgid "course"
+msgstr "course"
+
+#: .\courses\models.py:23
+msgid "IP address"
+msgstr "IP address"
+
+#: .\courses\models.py:27
+msgid "Course View"
+msgstr "Course View"
+
+#: .\courses\models.py:28
+msgid "Course Views"
+msgstr "Course Views"
+
+#: .\courses\models.py:36
+msgid "comment"
+msgstr "comment"
+
+#: .\courses\models.py:37
+msgid "receiver"
+msgstr "receiver"
+
+#: .\courses\models.py:38
+msgid "author"
+msgstr "author"
+
+#: .\courses\models.py:44
+msgid "Review"
+msgstr "Review"
+
+#: .\courses\models.py:45
+msgid "Reviews"
+msgstr "Reviews"
+
+#: .\courses\models.py:49 .\courses\models.py:63 .\users\models.py:113
+msgid "user"
+msgstr "user"
+
+#: .\courses\models.py:50
+msgid "review"
+msgstr "review"
+
+#: .\courses\models.py:57
+msgid "Review Like"
+msgstr "Review Like"
+
+#: .\courses\models.py:58
+msgid "Review Likes"
+msgstr "Review Likes"
+
+#: .\courses\models.py:64
+msgid "rating"
+msgstr "rating"
+
+#: .\courses\models.py:67
+msgid "Rating"
+msgstr "Rating"
+
+#: .\courses\models.py:68
+msgid "Ratings"
+msgstr "Ratings"
+
+#: .\courses\models.py:76
+msgid "fullname"
+msgstr "fullname"
+
+#: .\courses\models.py:77
+msgid "age"
+msgstr "age"
+
+#: .\courses\models.py:78 .\users\models.py:47
+msgid "email"
+msgstr "email"
+
+#: .\courses\models.py:80 .\users\models.py:52
+msgid "phone number"
+msgstr "phone number"
+
+#: .\courses\models.py:81
+msgid "message"
+msgstr "message"
+
+#: .\courses\models.py:87
+msgid "Feedback"
+msgstr "Feedback"
+
+#: .\courses\models.py:88
+msgid "Feedbacks"
+msgstr "Feedbacks"
+
+#: .\users\models.py:44
+msgid "Male"
+msgstr "Male"
+
+#: .\users\models.py:45
+msgid "Female"
+msgstr "Female"
+
+#: .\users\models.py:48
+msgid "auth status"
+msgstr "auth status"
+
+#: .\users\models.py:51
+msgid "gender"
+msgstr "gender"
+
+#: .\users\models.py:53
+msgid "is active"
+msgstr "is active"
+
+#: .\users\models.py:54
+msgid "login to the admin panel"
+msgstr "login to the admin panel"
+
+#: .\users\models.py:65
+msgid "User"
+msgstr "User"
+
+#: .\users\models.py:66
+msgid "Users"
+msgstr "Users"
+
+#: .\users\models.py:112
+msgid "code"
+msgstr "code"
+
+#: .\users\models.py:114
+msgid "expiration time"
+msgstr "expiration time"
+
+#: .\users\models.py:115
+msgid "is confirmed"
+msgstr "is confirmed"
+
+#: .\users\models.py:121
+msgid "User Confirmation"
+msgstr "User Confirmation"
+
+#: .\users\models.py:122
+msgid "User Confirmations"
+msgstr "User Confirmations"

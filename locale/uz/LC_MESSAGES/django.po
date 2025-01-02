@@ -1,0 +1,203 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-02 20:34+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+#: .\common\models.py:9
+msgid "created at"
+msgstr "yaratilgan vaqti"
+
+#: .\common\models.py:10
+msgid "updated at"
+msgstr "yangilangan vaqti"
+
+#: .\core\settings.py:153
+msgid "Uzbek"
+msgstr "O'zbek"
+
+#: .\core\settings.py:154
+msgid "Russian"
+msgstr "Ruscha"
+
+#: .\core\settings.py:155
+msgid "English"
+msgstr "Inglizcha"
+
+#: .\courses\models.py:9
+msgid "name"
+msgstr "nomi"
+
+#: .\courses\models.py:10
+msgid "image"
+msgstr "rasm"
+
+#: .\courses\models.py:11
+msgid "description"
+msgstr "ta'rif"
+
+#: .\courses\models.py:17
+msgid "Course"
+msgstr "Kurs"
+
+#: .\courses\models.py:18
+msgid "Courses"
+msgstr "Kurslar"
+
+#: .\courses\models.py:22 .\courses\models.py:35 .\courses\models.py:62
+#: .\courses\models.py:79
+msgid "course"
+msgstr "kurs"
+
+#: .\courses\models.py:23
+msgid "IP address"
+msgstr "IP manzil"
+
+#: .\courses\models.py:27
+msgid "Course View"
+msgstr "Kurs Ko'rish"
+
+#: .\courses\models.py:28
+msgid "Course Views"
+msgstr "Kurs Ko'rishlar"
+
+#: .\courses\models.py:36
+msgid "comment"
+msgstr "izoh"
+
+#: .\courses\models.py:37
+msgid "receiver"
+msgstr "oluvchi"
+
+#: .\courses\models.py:38
+msgid "author"
+msgstr "muallif"
+
+#: .\courses\models.py:44
+msgid "Review"
+msgstr "Sharh"
+
+#: .\courses\models.py:45
+msgid "Reviews"
+msgstr "Sharhlar"
+
+#: .\courses\models.py:49 .\courses\models.py:63 .\users\models.py:113
+msgid "user"
+msgstr "foydalanuvchi"
+
+#: .\courses\models.py:50
+msgid "review"
+msgstr "sharh"
+
+#: .\courses\models.py:57
+msgid "Review Like"
+msgstr "Sharhga Layk"
+
+#: .\courses\models.py:58
+msgid "Review Likes"
+msgstr "Sharhlarga Layklar"
+
+#: .\courses\models.py:64
+msgid "rating"
+msgstr "reyting"
+
+#: .\courses\models.py:67
+msgid "Rating"
+msgstr "Reyting"
+
+#: .\courses\models.py:68
+msgid "Ratings"
+msgstr "Reytinglar"
+
+#: .\courses\models.py:76
+msgid "fullname"
+msgstr "to'liq ism"
+
+#: .\courses\models.py:77
+msgid "age"
+msgstr "yosh"
+
+#: .\courses\models.py:78 .\users\models.py:47
+msgid "email"
+msgstr "elektron pochta"
+
+#: .\courses\models.py:80 .\users\models.py:52
+msgid "phone number"
+msgstr "telefon raqami"
+
+#: .\courses\models.py:81
+msgid "message"
+msgstr "xabar"
+
+#: .\courses\models.py:87
+msgid "Feedback"
+msgstr "Fikr-mulohaza"
+
+#: .\courses\models.py:88
+msgid "Feedbacks"
+msgstr "Fikr-mulohazalar"
+
+#: .\users\models.py:44
+msgid "Male"
+msgstr "Erkak"
+
+#: .\users\models.py:45
+msgid "Female"
+msgstr "Ayol"
+
+#: .\users\models.py:48
+msgid "auth status"
+msgstr "autentifikatsiya holati"
+
+#: .\users\models.py:51
+msgid "gender"
+msgstr "jins"
+
+#: .\users\models.py:53
+msgid "is active"
+msgstr "faol"
+
+#: .\users\models.py:54
+msgid "login to the admin panel"
+msgstr "admin paneliga kirish"
+
+#: .\users\models.py:65
+msgid "User"
+msgstr "Foydalanuvchi"
+
+#: .\users\models.py:66
+msgid "Users"
+msgstr "Foydalanuvchilar"
+
+#: .\users\models.py:112
+msgid "code"
+msgstr "kod"
+
+#: .\users\models.py:114
+msgid "expiration time"
+msgstr "amal qilish muddati"
+
+#: .\users\models.py:115
+msgid "is confirmed"
+msgstr "tasdiqlangan"
+
+#: .\users\models.py:121
+msgid "User Confirmation"
+msgstr "Foydalanuvchi Tasdiqlash"
+
+#: .\users\models.py:122
+msgid "User Confirmations"
+msgstr "Foydalanuvchi Tasdiqlashlar"
