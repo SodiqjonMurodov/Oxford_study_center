@@ -1,6 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import NotFound
-from rest_framework.generics import CreateAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, UpdateAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -11,7 +11,7 @@ from rest_framework.serializers import ValidationError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.utils.timezone import now
-from .serializers import SignUpSerializer, ChangeUserInformation, \
+from .serializers import SignUpSerializer, ChangeUserInformation, UserLanguageSerializer,\
     LoginSerializer, LoginRefreshSerializer, LogoutSerializer, ForgotPasswordSerializer, ResetPasswordSerializer
 
 
@@ -174,3 +174,11 @@ class ResetPasswordView(UpdateAPIView):
                 'refresh': user.token()['refresh_token'],
             }
         )
+
+class UserLanguageView(RetrieveUpdateAPIView):
+    serializer_class = UserLanguageSerializer
+    permission_classes = [IsAuthenticated, ]
+    http_method_names = ['patch', 'get']
+
+    def get_object(self):
+        return self.request.user

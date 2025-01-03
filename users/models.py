@@ -44,12 +44,18 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         ('MALE', _('Male')),
         ('FEMALE', _('Female')),
     )
+    LANGUAGE_CHOICES = (
+        ('uz', _('Uzbek')),
+        ('ru', _('Russian')),
+        ('en', _('English')),
+    )
     email = models.EmailField(_('email'), unique=True)
     auth_status = models.CharField(_('auth status'), max_length=31, choices=AUTH_STATUS, default=NEW)
-    fullname = models.CharField('fullname', max_length=150, blank=True, null=True)
-    date_of_birth = models.DateField('date of birth', null=True, blank=True)
+    fullname = models.CharField(_('fullname'), max_length=150, blank=True, null=True)
+    date_of_birth = models.DateField(_('date of birth'), null=True, blank=True)
     gender = models.CharField(_('gender'), max_length=6, choices=GENDER_CHOICES, null=True, blank=True)
     phone_number = PhoneNumberField(_('phone number'), null=True, blank=True)
+    language = models.CharField(_('language'), max_length=10, choices=LANGUAGE_CHOICES, default='ru')
     is_active = models.BooleanField(_('is active'), default=True)
     is_staff = models.BooleanField(_('login to the admin panel'), default=False)
 
@@ -110,7 +116,8 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
 class UserConfirmation(BaseModel):
     code = models.CharField(_('code'), max_length=4)
-    user = models.ForeignKey(to='users.User', on_delete=models.CASCADE, related_name='verify_codes', verbose_name=_('user'))
+    user = models.ForeignKey(to='users.User', on_delete=models.CASCADE, related_name='verify_codes',
+                             verbose_name=_('user'))
     expiration_time = models.DateTimeField(_('expiration time'), null=True, blank=True)
     is_confirmed = models.BooleanField(_('is confirmed'), default=False)
 
@@ -125,5 +132,3 @@ class UserConfirmation(BaseModel):
         if not self.pk or self.is_confirmed == False:
             self.expiration_time = now() + timedelta(minutes=EMAIL_EXPIRE_TIME)
         super(UserConfirmation, self).save(*args, **kwargs)
-
-

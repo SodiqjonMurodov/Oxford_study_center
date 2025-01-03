@@ -1,13 +1,12 @@
 from django.contrib.auth.models import Group
 from django.contrib import admin
 from users.models import User, UserConfirmation
-from modeltranslation.admin import TranslationAdmin
 
 admin.site.unregister(Group)
 
 
 @admin.register(User)
-class UserModelAdmin(TranslationAdmin):
+class UserModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'email', 'gender', 'date_of_birth', 'phone_number']
 
 

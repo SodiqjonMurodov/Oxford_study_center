@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-02 20:34+0500\n"
+"POT-Creation-Date: 2025-01-03 20:42+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: .\common\models.py:9
 msgid "created at"
 msgstr "время создания"
@@ -25,15 +26,15 @@ msgstr "время создания"
 msgid "updated at"
 msgstr "время обновления"
 
-#: .\core\settings.py:153
+#: .\core\settings.py:159 .\users\models.py:48
 msgid "Uzbek"
 msgstr "Узбекский"
 
-#: .\core\settings.py:154
+#: .\core\settings.py:160 .\users\models.py:49
 msgid "Russian"
 msgstr "Русский"
 
-#: .\core\settings.py:155
+#: .\core\settings.py:161 .\users\models.py:50
 msgid "English"
 msgstr "Английский"
 
@@ -94,7 +95,7 @@ msgstr "Отзыв"
 msgid "Reviews"
 msgstr "Отзывы"
 
-#: .\courses\models.py:49 .\courses\models.py:63 .\users\models.py:113
+#: .\courses\models.py:49 .\courses\models.py:63 .\users\models.py:120
 msgid "user"
 msgstr "пользователь"
 
@@ -122,7 +123,7 @@ msgstr "Рейтинг"
 msgid "Ratings"
 msgstr "Рейтинги"
 
-#: .\courses\models.py:76
+#: .\courses\models.py:76 .\users\models.py:54
 msgid "fullname"
 msgstr "полное имя"
 
@@ -130,11 +131,11 @@ msgstr "полное имя"
 msgid "age"
 msgstr "возраст"
 
-#: .\courses\models.py:78 .\users\models.py:47
+#: .\courses\models.py:78 .\users\models.py:52
 msgid "email"
 msgstr "электронная почта"
 
-#: .\courses\models.py:80 .\users\models.py:52
+#: .\courses\models.py:80 .\users\models.py:57
 msgid "phone number"
 msgstr "номер телефона"
 
@@ -158,46 +159,54 @@ msgstr "Мужчина"
 msgid "Female"
 msgstr "Женщина"
 
-#: .\users\models.py:48
+#: .\users\models.py:53
 msgid "auth status"
 msgstr "статус авторизации"
 
-#: .\users\models.py:51
+#: .\users\models.py:55
+msgid "date of birth"
+msgstr "Дата рождения"
+
+#: .\users\models.py:56
 msgid "gender"
 msgstr "пол"
 
-#: .\users\models.py:53
+#: .\users\models.py:58
+msgid "language"
+msgstr "язык"
+
+#: .\users\models.py:59
 msgid "is active"
 msgstr "активен"
 
-#: .\users\models.py:54
+#: .\users\models.py:60
 msgid "login to the admin panel"
 msgstr "вход в админ панель"
 
-#: .\users\models.py:65
+#: .\users\models.py:71
 msgid "User"
 msgstr "Пользователь"
 
-#: .\users\models.py:66
+#: .\users\models.py:72
 msgid "Users"
 msgstr "Пользователи"
 
-#: .\users\models.py:112
+#: .\users\models.py:118
 msgid "code"
 msgstr "код"
 
-#: .\users\models.py:114
+#: .\users\models.py:121
 msgid "expiration time"
 msgstr "время истечения"
 
-#: .\users\models.py:115
+#: .\users\models.py:122
 msgid "is confirmed"
 msgstr "подтвержден"
 
-#: .\users\models.py:121
+#: .\users\models.py:128
 msgid "User Confirmation"
 msgstr "Подтверждение пользователя"
 
-#: .\users\models.py:122
+#: .\users\models.py:129
 msgid "User Confirmations"
 msgstr "Подтверждения пользователей"

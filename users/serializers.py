@@ -1,6 +1,7 @@
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth.password_validation import validate_password
 from django.db.models import Q
+from pip._vendor.chardet.metadata.languages import Language
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import get_object_or_404
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -182,3 +183,8 @@ class ResetPasswordSerializer(serializers.ModelSerializer):
         instance.set_password(password)
         return super(ResetPasswordSerializer, self).update(instance, validated_data)
 
+
+class UserLanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['language']
